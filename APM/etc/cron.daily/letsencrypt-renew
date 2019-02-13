@@ -1,0 +1,5 @@
+#!/bin/sh
+if certbot renew > /var/log/letsencrypt/renew.log 2>&1 ; then
+   service apache2 reload
+fi
+exit
