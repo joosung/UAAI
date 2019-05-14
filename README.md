@@ -1,4 +1,4 @@
-# UAAI V.0.3.8-1
+# UAAI V.0.3.8-2
 APM AUTO INSTALL V.0.3.8 사용 설명서
 
 1. SSH와 SFTP 는 필히 root 권한으로 접속 합니다.
@@ -35,7 +35,7 @@ mysql 5.7.25
 Zend OPcache 7.2.15
 Let's Encrypt 0.27.1
 chkrootkit 0.52
-clamav 101.1-1
+clamav 101.2
 fail2ban 0.9.7-1
 mod_evasive 1.10.1-22
 mod_security 2.9.2-1
@@ -48,5 +48,4 @@ GeoIP 1.1.1
 사용자 계정 생성 스크립트 1.0.2
 사용자 계정 삭제 스크립트 1.0.2 등...... 그외 필요한 라이브러리도 같이 설치가 됩니다.
 </pre>
-
 
