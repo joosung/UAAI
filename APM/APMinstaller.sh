@@ -15,11 +15,11 @@
 #           repositories update          #
 #                                        #
 ########################################## 
-sudo add-apt-repository ppa:ondrej/apache2
+sudo add-apt-repository ppa:ondrej/apache2 -y
 
-sudo apt-get install software-properties-common
+sudo apt-get install software-properties-common -y
 
-sudo add-apt-repository ppa:ondrej/php
+sudo add-apt-repository ppa:ondrej/php -y
 
 apt -y update && sudo apt -y upgrade
 
