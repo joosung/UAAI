@@ -2,7 +2,7 @@
  
 #####################################################################################
 #                                                                                   #
-# * Ubuntu APMinstaller v.0.3.8                                                            #
+# * Ubuntu APMinstaller v.0.3.9                                                     #
 # * Ubuntu 18.04.1-live-server                                                      #
 # * Apache 2.4.X , Mysql 5.7.X, PHP 7.2.X setup shell script                        #
 # * Created Date    : 2019/2/12                                                     #
@@ -18,7 +18,7 @@
 
 apt -y update && sudo apt -y upgrade
 
-apt -y install git zip unzip sendmail glibc*
+apt -y install git zip unzip sendmail glibc* zlib1g-dev gcc make git autoconf autogen automake pkg-config libuuid-devel
 
 ##########################################
 #                                        #
@@ -44,6 +44,8 @@ ufw allow 80
 ufw allow 443
 
 ufw allow 3306
+
+ufw allow 19999
 
 systemctl restart apache2
 
@@ -92,7 +94,8 @@ echo '# deny file, folder start with dot
 
 ln -s /etc/apache2/conf-available/deny-apache2.conf /etc/apache2/conf-enabled/deny-apache2.conf
 
-cp /root/APM/index.html /var/www/html/
+cp /root/UAAI/APM/index.html /var/www/html/
+cp -f /root/UAAI/APM/index.html /usr/share/apache2/default-site/
 
 apt -y install libapache2-mpm-itk
 
@@ -112,7 +115,7 @@ apt -y install php
 apt -y install php-cli php-fpm php-common php-mbstring php-imap php-json php-ldap \
 php-mysqlnd php-xmlrpc php-memcache php-memcached php-geoip libgeoip-dev libapache2-mod-geoip \
 libapache2-mod-php php-pdo php-iconv php-xml php-soap php-gd php-mysql uwsgi-plugin-php  \
-php-opcache php-curl php-bcmath php-oauth php-dev libmcrypt-dev php-pear composer zlib1g-dev
+php-opcache php-curl php-bcmath php-oauth php-dev
 
 pecl channel-update pecl.php.net
 pecl install mcrypt-1.0.1
@@ -122,7 +125,7 @@ echo '#.php 를 제외한 나머지의 접근을 차단하자.
     Require all denied
 </FilesMatch>' >> /etc/apache2/mods-available/php7.2.conf
 
-cd /root/APM
+cd /root/UAAI/APM
 
 wget http://www.maxmind.com/download/geoip/api/c/GeoIP.tar.gz
 tar -xzvf GeoIP.tar.gz
@@ -160,13 +163,15 @@ mkdir /etc/skel/public_html
 
 chmod 707 /etc/skel/public_html
 
-chmod 700 /root/APM/adduser.sh
+chmod 700 /root/UAAI/adduser.sh
 
-chmod 700 /root/APM/deluser.sh
+chmod 700 /root/UAAI/deluser.sh
 
-cp /root/APM/skel/index.html /etc/skel/public_html/
+chmod 700 /root/AAI/restart.sh
 
-rm -rf /root/APM/GeoIP*
+chmod 700 /root/UAAI/clamav.sh
+
+cp /root/UAAI/APM/skel/index.html /etc/skel/public_html/
 
 systemctl restart apache2
 
@@ -204,7 +209,7 @@ default-character-set = utf8mb4" > /etc/mysql/mysql.conf.d/mysql-aai.cnf
 #                                        #
 ##########################################
 
-cd /root/APM
+cd /root/UAAI/APM
 
 #chkrootkit 설치
 apt -y install chkrootkit
@@ -227,6 +232,8 @@ freshclam
 mkdir /virus
 mkdir /backup
 
+/etc/init.d/clamav-daemon stop
+
 #mod_security 설치
 apt -y install libapache2-mod-security2
 
@@ -246,7 +253,7 @@ apt -y install memcached
 
 #mod_expires 설정
 a2enmod expires
-sudo systemctl restart apache2
+systemctl restart apache2
 
 echo "#mod_expires configuration" > /tmp/apache2.conf_tempfile
 echo "<IfModule mod_expires.c>"   >> /tmp/apache2.conf_tempfile
@@ -283,40 +290,52 @@ systemctl restart apache2
 #                                        #
 ##########################################
 
-mv /root/APM/etc/cron.daily/backup /etc/cron.daily/
-mv /root/APM/etc/cron.daily/letsencrypt-renew /etc/cron.daily/
+mv /root/UAAI/APM/etc/cron.daily/backup /etc/cron.daily/
+mv /root/UAAI/APM/etc/cron.daily/check_chkrootkit /etc/cron.daily/
+mv /root/UAAI/APM/etc/cron.daily/letsencrypt-renew /etc/cron.daily/
 
 chmod 700 /etc/cron.daily/backup
+chmod 700 /etc/cron.daily/check_chkrootkit
 chmod 700 /etc/cron.daily/letsencrypt-renew
 
-echo "00 20 * * * /root/check_chkrootkit" >> /etc/crontab
+echo "00 20 * * * /root/cron.daily/check_chkrootkit" >> /etc/crontab
 echo "01 02,14 * * * /etc/cron.daily/letsencrypt-renew" >> /etc/crontab
-echo "02 1 * * * clamscan -r /home --move=/virus" >> /etc/crontab
+echo "01 01 * * 7 /root/UAAI/clamav.sh" >> /etc/crontab
 
 #openssl 로 디피-헬만 파라미터(dhparam) 키 만들기 둘중 하나 선택
 #openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 
 #중요 폴더 및 파일 링크
-ln -s /etc/letsencrypt /root/APM/letsencrypt
-ln -s /etc/apache2 /root/APM/apache2
-ln -s /etc/mysql/conf.d/mysql.cnf /root/APM/mysql.cnf
-ln -s /etc/php/7.2/apache2/php.ini /root/APM/php.ini
+ln -s /etc/letsencrypt /root/UAAI/letsencrypt
+ln -s /etc/apache2 /root/UAAI/apache2
+ln -s /etc/mysql/conf.d/mysql.cnf /root/UAAI/mysql.cnf
+ln -s /etc/php/7.2/apache2/php.ini /root/UAAI/php.ini
 
-#설치 파일 삭제
-rm -rf /root/APM/etc
-rm -rf /root/APM/skel
-rm -rf /root/APM/index.html
 
 systemctl restart apache2
 
 /usr/bin/mysql_secure_installation
 
+##########################################
+#                                        #
+#              Netdata 설치               #
+#                                        #
+##########################################
+cd /root/UAAI
+
+wget https://my-netdata.io/kickstart.sh
+
+chmod 700 kickstart.sh
+
+sh kickstart.sh
+
+echo "Netdata 설치 완료!"
+
+rm -rf /root/UAAI/kickstart.sh
+
 echo ""
 echo ""
 echo "축하 드립니다. APMinstaller 모든 작업이 끝났습니다."
 
-rm -rf /root/APM/APMinstaller.sh
-
 exit 0
-
