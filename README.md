@@ -58,10 +58,10 @@ https://apachezone.com
 <pre>
 APM 설치 버전은 아래와 같습니다.
 
-apache2 2.4.29
-php 7.2.24
+apache2 2.4.41
+php 7.3.11
 mysql 5.7.27
-Zend OPcache 7.2.24
+Zend OPcache 7.3.11
 Let's Encrypt 0.27.0
 chkrootkit 0.52
 clamav 101.4
