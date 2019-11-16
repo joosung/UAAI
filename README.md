@@ -16,7 +16,7 @@ UAAI GIT 설치 방법
 SSH와 SFTP 는 필히 root 권한으로 접속 합니다.
 아래 명령어를 사용해서 설치를 진행 합니다. 설치 화면에서 'y' 만 누르면 설치가 진행 됩니다.
 <pre>
-yum -y install git \
+apt -y install git \
 && cd /root/ \
 && git clone https://github.com/joosung/UAAI.git \
 && cd UAAI \
