@@ -307,6 +307,10 @@ sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/ph
 sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/7.4/fpm/php.ini
 sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/7.4/fpm/php.ini 
 
+apt-get -y install php-ssh2
+
+apt-get -y install udisks2-btrfs
+
 
 mkdir /etc/skel/public_html
 
