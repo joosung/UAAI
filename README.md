@@ -1,13 +1,10 @@
-# UAAI V.0.3.9
-APM AUTO INSTALL V.0.3.9 사용 설명서
-
-UAAI - APM AUTO INSTALL V.0.3.9
+UAAI - APM AUTO INSTALL V.1.5
 <pre>
 쉽고 빠른 설치, 운영, 업데이트까지 고려한 설계
 쉬운 업데이트 지원. (공식+인기 저장소를 사용하여 apt-get 만으로 업데이트 완료)
 사용자 생성,삭제,백업 스크립트 사용으로 시스템 계정, 디비 계정 자동 생성 지원
 Let's Encrypt - 무료 SSL 인증서 발급 및 갱신 지원
-모니터링 툴 - netdata 지원
+모니터링 툴 - cockpit 지원
 </pre>
 
 
@@ -44,9 +41,13 @@ UAAI  주요 명령
 4. 스푸핑 에 관련된 메일을 받고 싶을땐 /etc/sysconfig/arpwatch 파일을 열어서 아래와 같이 수정 하세요.
    OPTIonS="-u pcap -e '메일주소' -s '보내는이(Arpwatch)' -n 'ㅣ자신의IP/24'"
 
-5. netdata 지원으로 인하여 port 19999 를 서버 방화벽에서 열어 주셔야 합니다.
+5. cockpit 지원으로 인하여 port 9090 를 서버 방화벽에서 열어 주셔야 합니다.
 
 6. clamav.sh Crontab 적용으로 매주 일요일 01시01분에 바이러스 체크를 진행하고 바이러스가 체크되면 자동으로 /virus 폴더로 이동 됩니다.
+
+7. 사용중인 php 버전을 다른 버전으로 교체 할 경우에는 /etc/apache2/sites-available/계정명-le-ssl.conf(또는 계정명.conf) 파일을 에디터로 열고 
+   SetHandler "proxy:unix:/var/run/php/php7.2-fpm.sock|fcgi://localhost/" 이부분을 찾아서 php7.2 부분의 뒷자리 두 숫자를 수정해 주시면 됩니다.
+   예 : PHP 5.6 사용시 5.6, PHP 7.0 사용시 7.0, PHP 7.4 사용시 7.4 등으로 수정 후 UAAI 폴더내의 ./restart.sh 를 진행해 주시면 됩니다. 
 
 
 그외 소소한(?) 튜닝이나 설정은 구글 검색을 또는 아파치존 QnA 를 통하여 질문 하시면서 자신이 사용하기 좋은 환경을 만들어 가시면 됩니다.
@@ -59,22 +60,27 @@ https://apachezone.com
 APM 설치 버전은 아래와 같습니다.
 
 apache2 2.4.41
-php 7.3.11
-mysql 5.7.27
+php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4
+mariadb 10.4.10
+ionCube PHP Loader 10.3.9
 Zend OPcache 7.3.11
-Let's Encrypt 0.27.0
-chkrootkit 0.52
-clamav 101.4
+Let's Encrypt 0.39.0
+chkrootkit 0.53
+clamav 101.4-1
+arpwatch 2.1a15
 fail2ban 0.9.7-1
 mod_evasive 1.10.1-22
 mod_security 2.9.2-1
 mod_security_crs 2.2.9-1
 memcache 3.0.9-0.9
-memcached 1.4.15-10
+memcached 3.1.3
 mod_expires 설정
+ImageMagick 6.9.7-4 
 GeoIP 1.1.1
-사용지 계정 백업 스크립트 1.0.2
-사용자 계정 생성 스크립트 1.0.2
-사용자 계정 삭제 스크립트 1.0.2 등...... 그외 필요한 라이브러리도 같이 설치가 됩니다.
+cockpit
+사용지 계정 백업 스크립트
+사용자 계정 생성 스크립트
+사용자 계정 삭제 스크립트 등...... 그외 필요한 라이브러리도 같이 설치가 됩니다.
 </pre>
 
+**해당 버전은 해당 APM 및 라이브러리 업데이트에 따라 달라 질 수 있습니다.

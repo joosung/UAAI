@@ -2,10 +2,10 @@
  
 #####################################################################################
 #                                                                                   #
-# * Ubuntu APMinstaller v.0.3.9                                                     #
+# * Ubuntu APMinstaller v.1.5                                                       #
 # * Ubuntu 18.04.1-live-server                                                      #
-# * Apache 2.4.X , Mysql 5.7.X, PHP 7.2.X setup shell script                        #
-# * Created Date    : 2019/2/12                                                     #
+# * Apache 2.4.X , MariaDB 10.4.X, Multi-PHP(base php7.2) setup shell script        #
+# * Created Date    : 2019/11/30                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -15,15 +15,19 @@
 #           repositories update          #
 #                                        #
 ########################################## 
-sudo add-apt-repository ppa:ondrej/apache2 -y
 
-sudo apt-get install software-properties-common -y
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 
-sudo add-apt-repository ppa:ondrej/php -y
+sudo add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mariadb.mirror.liquidtelecom.com/repo/10.4/ubuntu $(lsb_release -cs) main"
+sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
+sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic main multiverse restricted universe"
+sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic-security main multiverse restricted universe"
+sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic-updates main multiverse restricted universe"
 
-apt -y update && sudo apt -y upgrade
+apt-get -y install git zip unzip sendmail glibc* zlib1g-dev gcc g++ make git autoconf autogen automake \
+pkg-config libuuid-devel libc-dev curl wget gnupg2 ca-certificates lsb-release apt-transport-https
 
-apt -y install git zip unzip sendmail glibc* zlib1g-dev gcc make git autoconf autogen automake pkg-config libuuid-devel
+apt-get -y update && sudo apt-get -y upgrade
 
 ##########################################
 #                                        #
@@ -32,7 +36,7 @@ apt -y install git zip unzip sendmail glibc* zlib1g-dev gcc make git autoconf au
 ########################################## 
 
 # apache2 설치
-apt -y install apache2
+apt-get -y install apache2 libapache2-mod-fcgid
 
 ##########################################
 #                                        #
@@ -50,7 +54,7 @@ ufw allow 443
 
 ufw allow 3306
 
-ufw allow 19999
+ufw allow 9090
 
 systemctl restart apache2
 
@@ -69,6 +73,20 @@ sed -i '10s/#   Require all denied/   Require all denied/' /etc/apache2/conf-ava
 sed -i 's/#<\/Directory>/<\/Directory>/' /etc/apache2/conf-available/security.conf
 sed -i 's/#ServerName www.example.com/ServerName localhost/' /etc/apache2/sites-available/000-default.conf
 sed -i '/ServerAdmin/i\                ServerName localhost' /etc/apache2/sites-available/default-ssl.conf
+sed -i '/# Global configuration/i\ServerName localhost' /etc/apache2/apache2.conf
+
+echo '<IfModule mod_userdir.c>
+        UserDir public_html
+        UserDir disabled root
+
+        <Directory /var/www/*/public_html>
+                AllowOverride FileInfo AuthConfig Limit Indexes
+                Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+                Require method GET POST OPTIONS
+        </Directory>
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet ' > /etc/apache2/mods-available/userdir.conf
 
 echo '# deny file, folder start with dot
 <DirectoryMatch "^\.|\/\.">
@@ -102,33 +120,87 @@ ln -s /etc/apache2/conf-available/deny-apache2.conf /etc/apache2/conf-enabled/de
 cp /root/UAAI/APM/index.html /var/www/html/
 cp -f /root/UAAI/APM/index.html /usr/share/apache2/default-site/
 
-apt -y install libapache2-mpm-itk
+apt-get -y install libapache2-mpm-itk
 
 chmod 711 /home
 
 systemctl restart apache2
 
-apt -y install ssl-cert certbot python-certbot-apache
+apt-get -y install ssl-cert certbot python-certbot-apache
 
 ##########################################
 #                                        #
-#         PHP7.2 및 라이브러리 install       #
+#      Multi PHP 및 라이브러리 install      #
 #                                        #
 ########################################## 
 
-apt -y install php
-apt -y install php-cli php-fpm php-common php-mbstring php-imap php-json php-ldap \
-php-mysqlnd php-xmlrpc php-memcache php-memcached php-geoip libgeoip-dev libapache2-mod-geoip \
-libapache2-mod-php php-pdo php-iconv php-xml php-soap php-gd php-mysql uwsgi-plugin-php  \
-php-opcache php-curl php-bcmath php-oauth php-dev
+sudo apt-get install python-software-properties -y
+sudo apt-get install software-properties-common -y
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt-get update -y
 
-pecl channel-update pecl.php.net
-pecl install mcrypt-1.0.1
+apt-get -y install php7.2 php7.2-cli php7.2-fpm 
+apt-get -y install php-common php7.2-mbstring php7.2-imap php7.2-json php7.2-ldap php7.2-xmlrpc php-memcache php-memcached php-geoip php7.2-curl php7.2-xml php7.2-soap php7.2-gd php7.2-mysql php7.2-opcache php7.2-bcmath php7.2-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.2-bz2 php7.2-cgi php7.2-dba php7.2-enchant php7.2-gmp php7.2-snmp php7.2-zip php-imagick 
+
+apt-get -y install php5.6 php5.6-cli php5.6-fpm 
+apt-get -y install php5.6-common php5.6-mbstring php5.6-imap php5.6-json php5.6-ldap php5.6-mysqlnd php5.6-xmlrpc php5.6-memcache php5.6-memcached php5.6-geoip php5.6-curl php5.6-oauth php5.6-pdo php5.6-iconv php5.6-xml php5.6-soap php5.6-gd php5.6-mysql php5.6-opcache php5.6-bcmath php5.6-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php5.6-bz2 php5.6-cgi php5.6-dba php5.6-enchant php5.6-gmp php5.6-mcrypt php5.6-snmp php5.6-zip php5.6-imagick 
+
+apt-get -y install php7.0 php7.0-cli php7.0-fpm 
+apt-get -y install php7.0-common php7.0-mbstring php7.0-imap php7.0-json php7.0-ldap php7.0-mysqlnd php7.0-xmlrpc php7.0-memcache php7.0-memcached php7.0-geoip php7.0-curl php7.0-oauth php7.0-pdo php7.0-iconv php7.0-xml php7.0-soap php7.0-gd php7.0-mysql php7.0-opcache php7.0-bcmath php7.0-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.0-bz2 php7.0-cgi php7.0-dba php7.0-enchant php7.0-gmp php7.0-mcrypt php7.0-snmp php7.0-zip php7.0-imagick 
+
+apt-get -y install php7.1 php7.1-cli php7.1-fpm 
+apt-get -y install php7.1-common php7.1-mbstring php7.1-imap php7.1-json php7.1-ldap php7.1-mysqlnd php7.1-xmlrpc php7.1-memcache php7.1-memcached php7.1-geoip php7.1-curl php7.1-oauth php7.1-pdo php7.1-iconv php7.1-xml php7.1-soap php7.1-gd php7.1-mysql php7.1-opcache php7.1-bcmath php7.1-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.1-bz2 php7.1-cgi php7.1-dba php7.1-enchant php7.1-gmp php7.1-mcrypt php7.1-snmp php7.1-zip php7.1-imagick 
+
+apt-get -y install php7.3 php7.3-cli php7.3-fpm 
+apt-get -y install php-common php7.3-mbstring php7.3-imap php7.3-json php7.3-ldap php7.3-xmlrpc php-memcache php-memcached php-geoip php7.3-curl php7.3-xml php7.3-soap php7.3-gd php7.3-mysql php7.3-opcache php7.3-bcmath php7.3-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.3-bz2 php7.3-cgi php7.3-dba php7.3-enchant php7.3-gmp php7.3-snmp php7.3-zip php-imagick 
+
+apt-get -y install php7.4 php7.4-cli php7.4-fpm 
+apt-get -y install php-common php7.4-mbstring php7.4-imap php7.4-json php7.4-ldap php7.4-xmlrpc php-memcache php-memcached php-geoip php7.4-curl php7.4-xml php7.4-soap php7.4-gd php7.4-mysql php7.4-opcache php7.4-bcmath php7.4-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.4-bz2 php7.4-cgi php7.4-dba php7.4-enchant php7.4-gmp php7.4-snmp php7.4-zip php-imagick 
+
+sudo a2enmod actions alias proxy_fcgi fcgid
+
+update-alternatives --set php /usr/bin/php7.2
 
 echo '#.php 를 제외한 나머지의 접근을 차단하자.
 <FilesMatch ".+\.ph(p3|p4|p5|p7|ar|t|tml)$">
     Require all denied
 </FilesMatch>' >> /etc/apache2/mods-available/php7.2.conf
+
+echo "<VirtualHost *:80>
+         # The ServerName directive sets the request scheme, hostname and port that
+         # the server uses to identify itself. This is used when creating
+         # redirection URLs. In the context of virtual hosts, the ServerName
+         # specifies what hostname must appear in the request's Host: header to
+         # match this virtual host. For the default virtual host (this file) this
+         # value is not decisive as it is used as a last resort host regardless.
+         # However, you must set it for any further virtual host explicitly.
+         ServerName localhost
+
+         ServerAdmin webmaster@localhost
+         DocumentRoot /var/www/html
+
+         # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+         # error, crit, alert, emerg.
+         # It is also possible to configure the loglevel for particular
+         # modules, e.g.
+         #LogLevel info ssl:warn
+
+         ErrorLog ${APACHE_LOG_DIR}/error.log
+         CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+         # For most configuration files from conf-available/, which are
+         # enabled or disabled at a global level, it is possible to
+         # include a line for only one particular virtual host. For example the
+         # following line enables the CGI configuration for this host only
+         # after it has been globally disabled with "a2disconf".
+         #Include conf-available/serve-cgi-bin.conf
+         <FilesMatch \.php$>
+            # Apache 2.4.10+ can proxy to unix socket
+            SetHandler \"proxy:unix:/var/run/php/php7.2-fpm.sock|fcgi://localhost/\"
+         </FilesMatch>
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet " > /etc/apache2/sites-available/000-default.conf
 
 cd /root/UAAI/APM
 
@@ -141,30 +213,104 @@ make && make install
 sed -i 's/#GeoIPDBFile/GeoIPDBFile/' /etc/apache2/mods-available/geoip.conf
 sed -i 's/GeoIPEnable Off/GeoIPEnable On/' /etc/apache2/mods-available/geoip.conf
 
-a2enmod geoip
-a2enmod http2
-a2enmod rewrite
-a2enmod headers
-a2enmod ssl
-a2dismod -f autoindex
+sudo a2enmod geoip
+sudo a2enmod http2
+sudo a2enmod rewrite
+sudo a2enmod headers
+sudo a2enmod ssl
+sudo a2dismod -f autoindex
+
 
 systemctl restart apache2
 
-cp -av /etc/php/7.2/apache2/php.ini /etc/php/7.2/apache2/php.ini.original
-sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/7.2/apache2/php.ini
-sed -i 's/expose_php = On/expose_php = Off/' /etc/php/7.2/apache2/php.ini
-sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.2/apache2/php.ini
-sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/7.2/apache2/php.ini
-sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/7.2/apache2/php.ini
-sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/7.2/apache2/php.ini
-sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/7.2/apache2/php.ini
-sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/7.2/apache2/php.ini
-sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/7.2/apache2/php.ini
-sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/7.2/apache2/php.ini
-sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/7.2/apache2/php.ini
-sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/7.2/apache2/php.ini 
+cp -av /etc/php/5.6/fpm/php.ini /etc/php/5.6/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/5.6/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/5.6/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/5.6/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/5.6/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/5.6/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/5.6/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/5.6/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/5.6/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/5.6/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/5.6/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/5.6/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/5.6/fpm/php.ini 
+
+cp -av /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/7.0/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/7.0/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.0/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/7.0/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/7.0/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/7.0/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/7.0/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/7.0/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/7.0/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/7.0/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/7.0/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/7.0/fpm/php.ini 
+
+cp -av /etc/php/7.1/fpm/php.ini /etc/php/7.1/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/7.1/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/7.1/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.1/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/7.1/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/7.1/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/7.1/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/7.1/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/7.1/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/7.1/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/7.1/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/7.1/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/7.1/fpm/php.ini 
+
+cp -av /etc/php/7.2/fpm/php.ini /etc/php/7.2/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/7.2/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/7.2/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.2/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/7.2/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/7.2/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/7.2/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/7.2/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/7.2/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/7.2/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/7.2/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/7.2/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/7.2/fpm/php.ini 
+
+cp -av /etc/php/7.3/fpm/php.ini /etc/php/7.3/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/7.3/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/7.3/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.3/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/7.3/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/7.3/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/7.3/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/7.3/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/7.3/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/7.3/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/7.3/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/7.3/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/7.3/fpm/php.ini 
+
+cp -av /etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/7.4/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/7.4/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.4/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/7.4/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/7.4/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/7.4/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/7.4/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/7.4/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/7.4/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/7.4/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/7.4/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/7.4/fpm/php.ini 
+
 
 mkdir /etc/skel/public_html
+
+mkdir /etc/apache2/logs/
 
 chmod 707 /etc/skel/public_html
 
@@ -172,7 +318,7 @@ chmod 700 /root/UAAI/adduser.sh
 
 chmod 700 /root/UAAI/deluser.sh
 
-chmod 700 /root/AAI/restart.sh
+chmod 700 /root/UAAI/restart.sh
 
 chmod 700 /root/UAAI/clamav.sh
 
@@ -186,11 +332,11 @@ phpinfo();
 
 ##########################################
 #                                        #
-#        mysql 5.7 install & Setup       #
+#        mariadb install & Setup         #
 #                                        #
 ##########################################
 
-apt -y install mysql-server mysql-client
+apt-get -y install mariadb-server mariadb-client
 
 echo "[mysql]
 default-character-set = utf8mb4
@@ -217,16 +363,19 @@ default-character-set = utf8mb4" > /etc/mysql/mysql.conf.d/mysql-aai.cnf
 cd /root/UAAI/APM
 
 #chkrootkit 설치
-apt -y install chkrootkit
+apt-get -y install chkrootkit
 sed -i 's/RUN_DAILY="false"/RUN_DAILY="true"/' /etc/chkrootkit.conf
 
 #fail2ban 설치
-apt -y install fail2ban
+apt-get -y install fail2ban
 sed -i 's/#ignoreip/ignoreip/' /etc/fail2ban/jail.conf
 systemctl restart fail2ban
 
+#arpwatch 설치
+apt-get -y install arpwatch
+
 #clamav 설치
-apt -y install clamav clamav-daemon
+apt-get -y install clamav clamav-daemon
 
 lsof /var/log/clamav/freshclam.log
 pkill -15 -x freshclam
@@ -240,7 +389,7 @@ mkdir /backup
 /etc/init.d/clamav-daemon stop
 
 #mod_security 설치
-apt -y install libapache2-mod-security2
+apt-get -y install libapache2-mod-security2
 
 cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
 
@@ -254,7 +403,7 @@ sed -i '/<\/IfModule>/i\        IncludeOptional \/usr\/share\/modsecurity-crs\/r
 systemctl restart apache2
 
 #memcached 설치
-apt -y install memcached
+apt-get -y install memcached
 
 #mod_expires 설정
 a2enmod expires
@@ -311,12 +460,56 @@ echo "01 01 * * 7 /root/UAAI/clamav.sh" >> /etc/crontab
 #openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 
+#mcrypt 설치
+#sudo pecl install mcrypt-1.0.1
+
+#sudo bash -c "echo extension=/usr/lib/php/20190902/mcrypt.so > /etc/php/7.2/mods-available/mcrypt.ini"
+#ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/fpm/conf.d/20-mcrypt.ini
+#ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/cli/conf.d/20-mcrypt.ini
+#ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/cgi/conf.d/20-mcrypt.ini
+
+#sudo bash -c "echo extension=/usr/lib/php/20190902/mcrypt.so > /etc/php/7.3/mods-available/mcrypt.ini"
+#ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/fpm/conf.d/20-mcrypt.ini
+#ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/cli/conf.d/20-mcrypt.ini
+#ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/cgi/conf.d/20-mcrypt.ini
+
+#sudo bash -c "echo extension=/usr/lib/php/20190902/mcrypt.so > /etc/php/7.4/mods-available/mcrypt.ini"
+#ln -s /etc/php/7.4/mods-available/mcrypt.ini /etc/php/7.4/fpm/conf.d/20-mcrypt.ini
+#ln -s /etc/php/7.4/mods-available/mcrypt.ini /etc/php/7.4/cli/conf.d/20-mcrypt.ini
+#ln -s /etc/php/7.4/mods-available/mcrypt.ini /etc/php/7.4/cgi/conf.d/20-mcrypt.ini
+
+#ioncube loader 설치 및 설정
+cd /tmp && wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+tar xfz ioncube_loaders_lin_*.gz
+sudo mv /tmp/ioncube /usr/lib/php/ioncube
+rm -rf /tmp/ioncube*
+
+sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_5.6.so' /etc/php/5.6/fpm/php.ini
+sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_7.0.so' /etc/php/7.0/fpm/php.ini
+sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_7.1.so' /etc/php/7.1/fpm/php.ini
+sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_7.2.so' /etc/php/7.2/fpm/php.ini
+sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_7.3.so' /etc/php/7.3/fpm/php.ini
+
 #중요 폴더 및 파일 링크
 ln -s /etc/letsencrypt /root/UAAI/letsencrypt
 ln -s /etc/apache2 /root/UAAI/apache2
 ln -s /etc/mysql/conf.d/mysql.cnf /root/UAAI/mysql.cnf
-ln -s /etc/php/7.2/apache2/php.ini /root/UAAI/php.ini
 
+systemctl restart php5.6-fpm
+systemctl restart php7.0-fpm
+systemctl restart php7.1-fpm
+systemctl restart php7.2-fpm
+systemctl restart php7.3-fpm
+systemctl restart php7.4-fpm
+
+systemctl enable php5.6-fpm
+systemctl enable php7.0-fpm
+systemctl enable php7.1-fpm
+systemctl enable php7.2-fpm
+systemctl enable php7.3-fpm
+systemctl enable php7.4-fpm
+
+cd /root/UAAI
 
 systemctl restart apache2
 
@@ -324,20 +517,16 @@ systemctl restart apache2
 
 ##########################################
 #                                        #
-#              Netdata 설치               #
+#              cockpit 설치               #
 #                                        #
 ##########################################
 cd /root/UAAI
 
-wget https://my-netdata.io/kickstart.sh
+sudo apt -y install cockpit
 
-chmod 700 kickstart.sh
+sudo systemctl start cockpit
 
-sh kickstart.sh
-
-echo "Netdata 설치 완료!"
-
-rm -rf /root/UAAI/kickstart.sh
+sh /root/UAAI/restart.sh
 
 echo ""
 echo ""
