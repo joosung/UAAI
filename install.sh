@@ -44,7 +44,6 @@ sh APMinstaller.sh
 
 cd /root/UAAI
 
-
 echo ""
 echo ""
 echo "UAAI 설치 완료!"
