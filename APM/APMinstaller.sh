@@ -157,7 +157,7 @@ apt-get -y install php-common php7.3-mbstring php7.3-imap php7.3-json php7.3-lda
 apt-get -y install php7.4 php7.4-cli php7.4-fpm 
 apt-get -y install php-common php7.4-mbstring php7.4-imap php7.4-json php7.4-ldap php7.4-xmlrpc php-memcache php-memcached php-geoip php7.4-curl php7.4-xml php7.4-soap php7.4-gd php7.4-mysql php7.4-opcache php7.4-bcmath php7.4-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.4-bz2 php7.4-cgi php7.4-dba php7.4-enchant php7.4-gmp php7.4-snmp php7.4-zip php-imagick 
 
-sudo a2enmod actions alias proxy_fcgi fcgid -y
+sudo a2enmod actions alias proxy_fcgi fcgid
 
 update-alternatives --set php /usr/bin/php7.2
 
