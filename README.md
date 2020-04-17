@@ -1,4 +1,4 @@
-UAAI - APM AUTO INSTALL V.1.5.1
+UAAI - APM AUTO INSTALL V.1.5.2
 <pre>
 쉽고 빠른 설치, 운영, 업데이트까지 고려한 설계
 쉬운 업데이트 지원. (공식+인기 저장소를 사용하여 apt-get 만으로 업데이트 완료)
@@ -59,30 +59,29 @@ https://apachezone.com
 <pre>
 APM 설치 버전은 아래와 같습니다.
 
-apache2 2.4.41
+apache2 2.4.x
 php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4
-mariadb 10.4.10
-ionCube PHP Loader 10.3.9
-Zend OPcache 7.3.11
-Let's Encrypt 0.39.0
-chkrootkit 0.53
-clamav 101.4-1
-arpwatch 2.1a15
-fail2ban 0.9.7-1
-mod_evasive 1.10.1-22
-mod_security 2.9.2-1
-mod_security_crs 2.2.9-1
-memcache 3.0.9-0.9
-memcached 3.1.3
-mod_expires 설정
-ImageMagick 6.9.7-4 
-GeoIP 1.1.1
+mariadb 10.4.x
+ionCube PHP Loader
+Zend OPcache
+Let's Encrypt
+chkrootkit
+clamav
+arpwatch
+fail2ban
+mod_evasive
+mod_security
+mod_security_crs
+memcache
+memcached
+mod_expires
+ImageMagick 
+GeoIP
 cockpit
+phpmyadmin
 사용지 계정 백업 스크립트
 사용자 계정 생성 스크립트
 사용자 계정 삭제 스크립트 등...... 그외 필요한 라이브러리도 같이 설치가 됩니다.
 </pre>
-
-설치후 phpMyAdmin 접근이 불가 했던 부분을 수정 했습니다.
 
 **해당 버전은 해당 APM 및 라이브러리 업데이트에 따라 달라 질 수 있습니다.

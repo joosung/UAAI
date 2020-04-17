@@ -2,8 +2,8 @@
 
 ##########################################################
 # * deluser V 1.5                                        #
-# * Ubuntu APMinstaller v.1.5 전용                        #
-# * Created Date    : 2019/11/30                         #
+# * Ubuntu APMinstaller v.1.5.2 전용                      #
+# * Created Date    : 2020/04/17                         #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )  # 
 ##########################################################
 
