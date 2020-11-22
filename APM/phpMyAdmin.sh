@@ -19,7 +19,8 @@
 apt-get -y install phpmyadmin
 
 echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
-sed -i 's/cookie/http/' /etc/phpmyadmin/config.inc.php
+###phpmyadmin 로그인이 안되는 현상이 발생해서 주석 처리함
+#sed -i 's/cookie/http/' /etc/phpmyadmin/config.inc.php
 
 sh /root/UAAI/restart.sh
 
