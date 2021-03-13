@@ -62,7 +62,7 @@ https://apachezone.com
 APM 설치 버전은 아래와 같습니다.
 
 apache2 2.4.x
-php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4
+php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0
 mariadb 10.4.x
 ionCube PHP Loader
 Zend OPcache
