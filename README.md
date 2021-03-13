@@ -1,4 +1,4 @@
-UAAI - APM AUTO INSTALL V.1.5.2
+UAAI - APM AUTO INSTALL V.1.5.3
 <pre>
 쉽고 빠른 설치, 운영, 업데이트까지 고려한 설계
 쉬운 업데이트 지원. (공식+인기 저장소를 사용하여 apt-get 만으로 업데이트 완료)
@@ -49,6 +49,8 @@ UAAI  주요 명령
    SetHandler "proxy:unix:/var/run/php/php7.2-fpm.sock|fcgi://localhost/" 이부분을 찾아서 php7.2 부분의 뒷자리 두 숫자를 수정해 주시면 됩니다.
    예 : PHP 5.6 사용시 5.6, PHP 7.0 사용시 7.0, PHP 7.4 사용시 7.4 등으로 수정 후 UAAI 폴더내의 ./restart.sh 를 진행해 주시면 됩니다. 
 
+8. phpmyadmin wget 설치로 변경하고 http://ip/phpmyadmin 으로 호출하여 사용 되며, 버추얼 호스트 수정 또는 추가를 이용해 서브 도메인으로 사용 하실 수 있습니다.
+
 
 그외 소소한(?) 튜닝이나 설정은 구글 검색을 또는 아파치존 QnA 를 통하여 질문 하시면서 자신이 사용하기 좋은 환경을 만들어 가시면 됩니다.
 
@@ -78,7 +80,7 @@ mod_expires
 ImageMagick 
 GeoIP
 cockpit
-phpmyadmin
+phpmyadmin 설치 수정
 사용지 계정 백업 스크립트
 사용자 계정 생성 스크립트
 사용자 계정 삭제 스크립트 등...... 그외 필요한 라이브러리도 같이 설치가 됩니다.
