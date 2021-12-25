@@ -2,10 +2,10 @@
  
 #####################################################################################
 #                                                                                   #
-# * Ubuntu APMinstaller v.1.5.3                                                     #
+# * Ubuntu APMinstaller v.1.5.4                                                     #
 # * Ubuntu 18.04.5-live-server                                                      #
 # * Apache 2.4.X , MariaDB 10.5.X, Multi-PHP(base php7.2) setup shell script        #
-# * Created Date    : 2021/03/12                                                    #
+# * Created Date    : 2021/12/24                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -151,7 +151,9 @@ apt-get -y install php7.3 php7.3-cli php7.3-fpm php-common php7.3-mbstring php7.
 
 apt-get -y install php7.4 php7.4-cli php7.4-fpm php-common php7.4-mbstring php7.4-imap php7.4-json php7.4-ldap php7.4-xmlrpc php-memcache php-memcached php-geoip php7.4-curl php7.4-xml php7.4-soap php7.4-gd php7.4-mysql php7.4-opcache php7.4-bcmath php7.4-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.4-bz2 php7.4-cgi php7.4-dba php7.4-enchant php7.4-gmp php7.4-snmp php7.4-zip php-imagick 
 
-apt-get -y install php8.0 php8.0-cli php8.0-fpm php-common php8.0-mbstring php8.0-imap php8.0-json php8.0-ldap php8.0-xmlrpc php-memcache php-memcached php-geoip php8.0-curl php8.0-xml php8.0-soap php8.0-gd php8.0-mysql php8.0-opcache php8.0-bcmath php8.0-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.0-bz2 php8.0-cgi php8.0-dba php8.0-enchant php8.0-gmp php8.0-snmp php8.0-zip php-imagick 
+apt-get -y install php8.0 php8.0-cli php8.0-fpm php-common php8.0-mbstring php8.0-imap php8.0-ldap php8.0-xmlrpc php-memcache php-memcached php-geoip php8.0-curl php8.0-xml php8.0-soap php8.0-gd php8.0-mysql php8.0-opcache php8.0-bcmath php8.0-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.0-bz2 php8.0-cgi php8.0-dba php8.0-enchant php8.0-gmp php8.0-snmp php8.0-zip php-imagick 
+
+apt-get -y install php8.1 php8.1-cli php8.1-fpm php-common php8.1-mbstring php8.1-imap php8.1-ldap php8.1-xmlrpc php-memcache php-memcached php-geoip php8.1-curl php8.1-xml php8.1-soap php8.1-gd php8.1-mysql php8.1-opcache php8.1-bcmath php8.1-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.1-bz2 php8.1-cgi php8.1-dba php8.1-enchant php8.1-gmp php8.1-snmp php8.1-zip php-imagick 
 
 sudo a2enmod actions alias proxy_fcgi fcgid
 
@@ -316,6 +318,20 @@ sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/8.0/fpm/php.
 sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/8.0/fpm/php.ini
 sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/8.0/fpm/php.ini
 sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/8.0/fpm/php.ini 
+
+cp -av /etc/php/8.1/fpm/php.ini /etc/php/8.1/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/8.1/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/8.1/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/8.1/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/8.1/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/8.1/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/8.1/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/8.1/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/8.1/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/8.1/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/8.1/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/8.1/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/8.1/fpm/php.ini 
 
 apt-get -y install php-ssh2
 
@@ -518,6 +534,7 @@ systemctl restart php7.2-fpm
 systemctl restart php7.3-fpm
 systemctl restart php7.4-fpm
 systemctl restart php8.0-fpm
+systemctl restart php8.1-fpm
 
 systemctl enable php5.6-fpm
 systemctl enable php7.0-fpm
@@ -526,6 +543,7 @@ systemctl enable php7.2-fpm
 systemctl enable php7.3-fpm
 systemctl enable php7.4-fpm
 systemctl enable php8.0-fpm
+systemctl enable php8.1-fpm
 
 cd /root/UAAI
 
