@@ -17,6 +17,7 @@
 ##########################################
 
 # sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 3B4FE6ACC0B21F32
 
 sudo curl -o /etc/apt/trusted.gpg.d/mariadb_release_signing_key.asc 'https://mariadb.org/mariadb_release_signing_key.asc'
 sudo sh -c "echo 'deb https://download.nus.edu.sg/mirror/mariadb/repo/10.10/ubuntu jammy main' >>/etc/apt/sources.list"
