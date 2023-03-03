@@ -27,8 +27,8 @@ sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic main multiv
 sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic-security main multiverse restricted universe"
 sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic-updates main multiverse restricted universe"
 
-apt-get -y install git zip unzip sendmail glibc* zlib1g-dev gcc g++ make git autoconf autogen automake \
-pkg-config uuid-dev libc-dev curl wget gnupg2 ca-certificates lsb-release apt-transport-https
+apt-get -y install git zip unzip sendmail glibc-source glibc-tools glibc-doc libc6-pic glibc-doc-reference zlib1g-dev gcc g++ make git autoconf autogen automake \
+pkg-config uuid-dev libc6-dev curl wget gnupg2 ca-certificates lsb-release apt-transport-https
 
 apt-get -y update && sudo apt-get -y upgrade
 
