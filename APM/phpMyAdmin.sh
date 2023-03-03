@@ -1,5 +1,5 @@
 #!/bin/bash
- 
+
 #####################################################################################
 #                                                                                   #
 # * Ubuntu APMinstaller v.1.5.3                                                     #
@@ -14,7 +14,7 @@
 #                                        #
 #           phpMyAdmin install           #
 #                                        #
-########################################## 
+##########################################
 
 
 
@@ -22,10 +22,10 @@ apt-get install unzip
 
 cd /var/www/html
 
-wget https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.zip
-unzip phpMyAdmin-5.1.0-all-languages.zip
-mv phpMyAdmin-5.1.0-all-languages phpmyadmin
-rm phpMyAdmin-5.1.0-all-languages.zip
+wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
+unzip phpMyAdmin-5.2.1-all-languages.zip
+mv phpMyAdmin-5.2.1-all-languages phpmyadmin
+rm phpMyAdmin-5.2.1-all-languages.zip
 
 cd phpmyadmin
 cp -av config.sample.inc.php config.inc.php
