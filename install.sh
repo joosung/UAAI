@@ -2,10 +2,10 @@
 
 #####################################################################################
 #                                                                                   #
-# * Ubuntu APMinstaller v.1.5.4                                                     #
-# * Ubuntu 18.04.1-live-server                                                      #
-# * Apache 2.4.X , MariaDB 10.4.X, Multi-PHP(base php7.2) setup shell script        #
-# * Created Date    : 2021/12/24                                                    #
+# * Ubuntu with AAI                                                                 #
+# * Ubuntu 20.04.5-live-server                                                      #
+# * Apache 2.4.X , MariaDB 10.5.X, Multi-PHP(base php7.2) setup shell script        #
+# * Created Date    : 2023/03/31                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################

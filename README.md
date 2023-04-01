@@ -1,5 +1,6 @@
-UAAI - APM AUTO INSTALL V.1.5.4
+UAAI - APM AUTO INSTALL V.20
 <pre>
+UBUNTU 20.04 버전에서 작업되어 졌습니다.
 쉽고 빠른 설치, 운영, 업데이트까지 고려한 설계
 쉬운 업데이트 지원. (공식+인기 저장소를 사용하여 apt-get 만으로 업데이트 완료)
 사용자 생성,삭제,백업 스크립트 사용으로 시스템 계정, 디비 계정 자동 생성 지원
@@ -62,8 +63,8 @@ https://apachezone.com
 APM 설치 버전은 아래와 같습니다.
 
 apache2 2.4.x
-php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1
-mariadb 10.4.x
+php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2
+mariadb 10.3.x
 ionCube PHP Loader
 Zend OPcache
 Let's Encrypt

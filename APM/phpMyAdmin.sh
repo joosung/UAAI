@@ -2,10 +2,10 @@
  
 #####################################################################################
 #                                                                                   #
-# * Ubuntu APMinstaller v.1.5.3                                                     #
-# * Ubuntu 18.04.1-live-server                                                      #
-# * Apache 2.4.X , MariaDB 10.4.X, Multi-PHP(base php7.2) setup shell script        #
-# * Created Date    : 2021/03/12                                                    #
+# * Ubuntu with AAI                                                                 #
+# * Ubuntu 20.04.5-live-server                                                      #
+# * Apache 2.4.X , MariaDB 10.3.X, Multi-PHP(base php7.2) setup shell script        #
+# * Created Date    : 2023/03/31                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -22,10 +22,10 @@ apt-get install unzip
 
 cd /var/www/html
 
-wget https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.zip
-unzip phpMyAdmin-5.1.0-all-languages.zip
-mv phpMyAdmin-5.1.0-all-languages phpmyadmin
-rm phpMyAdmin-5.1.0-all-languages.zip
+wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
+unzip phpMyAdmin-5.2.1-all-languages.zip
+mv phpMyAdmin-5.2.1-all-languages phpmyadmin
+rm phpMyAdmin-5.2.1-all-languages.zip
 
 cd phpmyadmin
 cp -av config.sample.inc.php config.inc.php

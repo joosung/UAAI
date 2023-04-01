@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ##########################################################
-# * deluser V 1.5                                        #
-# * Ubuntu APMinstaller v.1.5.3 전용                      #
-# * Created Date    : 2020/04/17                         #
+# * adduser V 20                                         #
+# * Ubuntu with AAI                                      #
+# * Created Date    : 2023/03/31                         #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )  # 
 ##########################################################
 

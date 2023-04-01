@@ -2,10 +2,10 @@
  
 #####################################################################################
 #                                                                                   #
-# * Ubuntu APMinstaller v.1.5.4                                                     #
-# * Ubuntu 18.04.5-live-server                                                      #
-# * Apache 2.4.X , MariaDB 10.5.X, Multi-PHP(base php7.2) setup shell script        #
-# * Created Date    : 2021/12/24                                                    #
+# * Ubuntu with AAI                                                                 #
+# * Ubuntu 20.04.5-live-server                                                      #
+# * Apache 2.4.X , MariaDB 10.3.X, Multi-PHP(base php7.2) setup shell script        #
+# * Created Date    : 2023/03/31                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -16,18 +16,10 @@
 #                                        #
 ########################################## 
 
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+apt -y install git zip unzip sendmail glibc* zlib1g-dev gcc g++ make git autoconf autogen automake \
+pkg-config libc-dev curl wget gnupg2 ca-certificates lsb-release apt-transport-https
 
-sudo add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mariadb.mirror.liquidtelecom.com/repo/10.5/ubuntu $(lsb_release -cs) main"
-sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
-sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic main multiverse restricted universe"
-sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic-security main multiverse restricted universe"
-sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu bionic-updates main multiverse restricted universe"
-
-apt-get -y install git zip unzip sendmail glibc* zlib1g-dev gcc g++ make git autoconf autogen automake \
-pkg-config libuuid-devel libc-dev curl wget gnupg2 ca-certificates lsb-release apt-transport-https
-
-apt-get -y update && sudo apt-get -y upgrade
+apt -y update && sudo apt -y upgrade
 
 ##########################################
 #                                        #
@@ -36,7 +28,7 @@ apt-get -y update && sudo apt-get -y upgrade
 ########################################## 
 
 # apache2 설치
-apt-get -y install apache2 libapache2-mod-fcgid
+apt -y install apache2 libapache2-mod-fcgid
 
 ##########################################
 #                                        #
@@ -44,7 +36,7 @@ apt-get -y install apache2 libapache2-mod-fcgid
 #                                        #
 ##########################################  
 
-ufw enable
+ufw enable -y
 
 ufw allow 22
 
@@ -120,13 +112,13 @@ ln -s /etc/apache2/conf-available/deny-apache2.conf /etc/apache2/conf-enabled/de
 cp /root/UAAI/APM/index.html /var/www/html/
 cp -f /root/UAAI/APM/index.html /usr/share/apache2/default-site/
 
-apt-get -y install libapache2-mpm-itk
+apt -y install libapache2-mpm-itk
 
 chmod 711 /home
 
 systemctl restart apache2
 
-apt-get -y install ssl-cert certbot python-certbot-apache
+apt -y install ssl-cert certbot python3-certbot-apache
 
 ##########################################
 #                                        #
@@ -134,26 +126,28 @@ apt-get -y install ssl-cert certbot python-certbot-apache
 #                                        #
 ########################################## 
 
-sudo apt-get install python-software-properties -y
-sudo apt-get install software-properties-common -y
+sudo apt install python3-software-properties -y
+sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:ondrej/php -y
-sudo apt-get update -y
+sudo apt update -y
 
-apt-get -y install php7.2 php7.2-cli php7.2-fpm php-common php7.2-mbstring php7.2-imap php7.2-json php7.2-ldap php7.2-xmlrpc php-memcache php-memcached php-geoip php7.2-curl php7.2-xml php7.2-soap php7.2-gd php7.2-mysql php7.2-opcache php7.2-bcmath php7.2-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.2-bz2 php7.2-cgi php7.2-dba php7.2-enchant php7.2-gmp php7.2-snmp php7.2-zip php-imagick 
+apt -y install php7.2 php7.2-cli php7.2-fpm php-common php7.2-mbstring php7.2-imap php7.2-json php7.2-ldap php7.2-xmlrpc php-memcache php-memcached php-geoip php7.2-curl php7.2-xml php7.2-soap php7.2-gd php7.2-mysql php7.2-opcache php7.2-bcmath php7.2-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.2-bz2 php7.2-cgi php7.2-dba php7.2-enchant php7.2-gmp php7.2-snmp php7.2-zip php-imagick 
 
-apt-get -y install php5.6 php5.6-cli php5.6-fpm php5.6-common php5.6-mbstring php5.6-imap php5.6-json php5.6-ldap php5.6-mysqlnd php5.6-xmlrpc php5.6-memcache php5.6-memcached php5.6-geoip php5.6-curl php5.6-oauth php5.6-pdo php5.6-iconv php5.6-xml php5.6-soap php5.6-gd php5.6-mysql php5.6-opcache php5.6-bcmath php5.6-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php5.6-bz2 php5.6-cgi php5.6-dba php5.6-enchant php5.6-gmp php5.6-mcrypt php5.6-snmp php5.6-zip php5.6-imagick 
+apt -y install php5.6 php5.6-cli php5.6-fpm php5.6-common php5.6-mbstring php5.6-imap php5.6-json php5.6-ldap php5.6-mysqlnd php5.6-xmlrpc php5.6-memcache php5.6-memcached php5.6-geoip php5.6-curl php5.6-oauth php5.6-pdo php5.6-iconv php5.6-xml php5.6-soap php5.6-gd php5.6-mysql php5.6-opcache php5.6-bcmath php5.6-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php5.6-bz2 php5.6-cgi php5.6-dba php5.6-enchant php5.6-gmp php5.6-mcrypt php5.6-snmp php5.6-zip php5.6-imagick 
 
-apt-get -y install php7.0 php7.0-cli php7.0-fpm php7.0-common php7.0-mbstring php7.0-imap php7.0-json php7.0-ldap php7.0-mysqlnd php7.0-xmlrpc php7.0-memcache php7.0-memcached php7.0-geoip php7.0-curl php7.0-oauth php7.0-pdo php7.0-iconv php7.0-xml php7.0-soap php7.0-gd php7.0-mysql php7.0-opcache php7.0-bcmath php7.0-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.0-bz2 php7.0-cgi php7.0-dba php7.0-enchant php7.0-gmp php7.0-mcrypt php7.0-snmp php7.0-zip php7.0-imagick 
+apt -y install php7.0 php7.0-cli php7.0-fpm php7.0-common php7.0-mbstring php7.0-imap php7.0-json php7.0-ldap php7.0-mysqlnd php7.0-xmlrpc php7.0-memcache php7.0-memcached php7.0-geoip php7.0-curl php7.0-oauth php7.0-pdo php7.0-iconv php7.0-xml php7.0-soap php7.0-gd php7.0-mysql php7.0-opcache php7.0-bcmath php7.0-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.0-bz2 php7.0-cgi php7.0-dba php7.0-enchant php7.0-gmp php7.0-mcrypt php7.0-snmp php7.0-zip php7.0-imagick 
 
-apt-get -y install php7.1 php7.1-cli php7.1-fpm php7.1-common php7.1-mbstring php7.1-imap php7.1-json php7.1-ldap php7.1-mysqlnd php7.1-xmlrpc php7.1-memcache php7.1-memcached php7.1-geoip php7.1-curl php7.1-oauth php7.1-pdo php7.1-iconv php7.1-xml php7.1-soap php7.1-gd php7.1-mysql php7.1-opcache php7.1-bcmath php7.1-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.1-bz2 php7.1-cgi php7.1-dba php7.1-enchant php7.1-gmp php7.1-mcrypt php7.1-snmp php7.1-zip php7.1-imagick 
+apt -y install php7.1 php7.1-cli php7.1-fpm php7.1-common php7.1-mbstring php7.1-imap php7.1-json php7.1-ldap php7.1-mysqlnd php7.1-xmlrpc php7.1-memcache php7.1-memcached php7.1-geoip php7.1-curl php7.1-oauth php7.1-pdo php7.1-iconv php7.1-xml php7.1-soap php7.1-gd php7.1-mysql php7.1-opcache php7.1-bcmath php7.1-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.1-bz2 php7.1-cgi php7.1-dba php7.1-enchant php7.1-gmp php7.1-mcrypt php7.1-snmp php7.1-zip php7.1-imagick 
 
-apt-get -y install php7.3 php7.3-cli php7.3-fpm php-common php7.3-mbstring php7.3-imap php7.3-json php7.3-ldap php7.3-xmlrpc php-memcache php-memcached php-geoip php7.3-curl php7.3-xml php7.3-soap php7.3-gd php7.3-mysql php7.3-opcache php7.3-bcmath php7.3-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.3-bz2 php7.3-cgi php7.3-dba php7.3-enchant php7.3-gmp php7.3-snmp php7.3-zip php-imagick 
+apt -y install php7.3 php7.3-cli php7.3-fpm php-common php7.3-mbstring php7.3-imap php7.3-json php7.3-ldap php7.3-xmlrpc php-memcache php-memcached php-geoip php7.3-curl php7.3-xml php7.3-soap php7.3-gd php7.3-mysql php7.3-opcache php7.3-bcmath php7.3-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.3-bz2 php7.3-cgi php7.3-dba php7.3-enchant php7.3-gmp php7.3-snmp php7.3-zip php-imagick 
 
-apt-get -y install php7.4 php7.4-cli php7.4-fpm php-common php7.4-mbstring php7.4-imap php7.4-json php7.4-ldap php7.4-xmlrpc php-memcache php-memcached php-geoip php7.4-curl php7.4-xml php7.4-soap php7.4-gd php7.4-mysql php7.4-opcache php7.4-bcmath php7.4-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.4-bz2 php7.4-cgi php7.4-dba php7.4-enchant php7.4-gmp php7.4-snmp php7.4-zip php-imagick 
+apt -y install php7.4 php7.4-cli php7.4-fpm php-common php7.4-mbstring php7.4-imap php7.4-json php7.4-ldap php7.4-xmlrpc php-memcache php-memcached php-geoip php7.4-curl php7.4-xml php7.4-soap php7.4-gd php7.4-mysql php7.4-opcache php7.4-bcmath php7.4-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php7.4-bz2 php7.4-cgi php7.4-dba php7.4-enchant php7.4-gmp php7.4-snmp php7.4-zip php-imagick 
 
-apt-get -y install php8.0 php8.0-cli php8.0-fpm php-common php8.0-mbstring php8.0-imap php8.0-ldap php8.0-xmlrpc php-memcache php-memcached php-geoip php8.0-curl php8.0-xml php8.0-soap php8.0-gd php8.0-mysql php8.0-opcache php8.0-bcmath php8.0-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.0-bz2 php8.0-cgi php8.0-dba php8.0-enchant php8.0-gmp php8.0-snmp php8.0-zip php-imagick 
+apt -y install php8.0 php8.0-cli php8.0-fpm php-common php8.0-mbstring php8.0-imap php8.0-ldap php8.0-xmlrpc php-memcache php-memcached php-geoip php8.0-curl php8.0-xml php8.0-soap php8.0-gd php8.0-mysql php8.0-opcache php8.0-bcmath php8.0-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.0-bz2 php8.0-cgi php8.0-dba php8.0-enchant php8.0-gmp php8.0-snmp php8.0-zip php-imagick 
 
-apt-get -y install php8.1 php8.1-cli php8.1-fpm php-common php8.1-mbstring php8.1-imap php8.1-ldap php8.1-xmlrpc php-memcache php-memcached php-geoip php8.1-curl php8.1-xml php8.1-soap php8.1-gd php8.1-mysql php8.1-opcache php8.1-bcmath php8.1-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.1-bz2 php8.1-cgi php8.1-dba php8.1-enchant php8.1-gmp php8.1-snmp php8.1-zip php-imagick 
+apt -y install php8.1 php8.1-cli php8.1-fpm php-common php8.1-mbstring php8.1-imap php8.1-ldap php8.1-xmlrpc php-memcache php-memcached php-geoip php8.1-curl php8.1-xml php8.1-soap php8.1-gd php8.1-mysql php8.1-opcache php8.1-bcmath php8.1-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.1-bz2 php8.1-cgi php8.1-dba php8.1-enchant php8.1-gmp php8.1-snmp php8.1-zip php-imagick 
+
+apt -y install php8.2 php8.2-cli php8.2-fpm php-common php8.2-mbstring php8.2-imap php8.2-ldap php8.2-xmlrpc php-memcache php-memcached php-geoip php8.2-curl php8.2-xml php8.2-soap php8.2-gd php8.2-mysql php8.2-opcache php8.2-bcmath php8.2-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.2-bz2 php8.2-cgi php8.2-dba php8.2-enchant php8.2-gmp php8.2-snmp php8.2-zip php-imagick 
 
 sudo a2enmod actions alias proxy_fcgi fcgid
 
@@ -202,9 +196,9 @@ echo "<VirtualHost *:80>
 
 cd /root/UAAI/APM
 
-wget http://www.maxmind.com/download/geoip/api/c/GeoIP.tar.gz
-tar -xzvf GeoIP.tar.gz
-cd GeoIP-1.4.8
+wget https://github.com/maxmind/geoip-api-c/releases/download/v1.6.12/GeoIP-1.6.12.tar.gz
+tar -xzvf GeoIP-1.6.12.tar.gz
+cd GeoIP-1.6.12
 ./configure
 make && make install
 
@@ -333,9 +327,23 @@ sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/ph
 sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/8.1/fpm/php.ini
 sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/8.1/fpm/php.ini 
 
-apt-get -y install php-ssh2
+cp -av /etc/php/8.2/fpm/php.ini /etc/php/8.2/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/8.2/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/8.2/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/8.2/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/8.2/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/8.2/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/8.2/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/8.2/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/8.2/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/8.2/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/8.2/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/8.2/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/8.2/fpm/php.ini 
 
-apt-get -y install udisks2-btrfs
+apt -y install php-ssh2
+
+apt -y install udisks2-btrfs
 
 
 mkdir /etc/skel/public_html
@@ -366,7 +374,7 @@ phpinfo();
 #                                        #
 ##########################################
 
-apt-get -y install mariadb-server mariadb-client
+apt -y install mariadb-server mariadb-client
 
 echo "[mysql]
 default-character-set = utf8mb4
@@ -382,7 +390,7 @@ query_cache_size = 16M
 sql_mode = NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
   
 [client]
-default-character-set = utf8mb4" > /etc/mysql/mysql.conf.d/mysql-aai.cnf
+default-character-set = utf8mb4" > /etc/mysql/mariadb.conf.d/mysql-aai.cnf
 
 ##########################################
 #                                        #
@@ -393,19 +401,19 @@ default-character-set = utf8mb4" > /etc/mysql/mysql.conf.d/mysql-aai.cnf
 cd /root/UAAI/APM
 
 #chkrootkit 설치
-apt-get -y install chkrootkit
+apt -y install chkrootkit
 sed -i 's/RUN_DAILY="false"/RUN_DAILY="true"/' /etc/chkrootkit.conf
 
 #fail2ban 설치
-apt-get -y install fail2ban
+apt -y install fail2ban
 sed -i 's/#ignoreip/ignoreip/' /etc/fail2ban/jail.conf
 systemctl restart fail2ban
 
 #arpwatch 설치
-apt-get -y install arpwatch
+apt -y install arpwatch
 
 #clamav 설치
-apt-get -y install clamav clamav-daemon
+apt -y install clamav clamav-daemon
 
 lsof /var/log/clamav/freshclam.log
 pkill -15 -x freshclam
@@ -419,7 +427,7 @@ mkdir /backup
 /etc/init.d/clamav-daemon stop
 
 #mod_security 설치
-apt-get -y install libapache2-mod-security2
+apt -y install libapache2-mod-security2
 
 cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
 
@@ -433,7 +441,7 @@ sed -i '/<\/IfModule>/i\        IncludeOptional \/usr\/share\/modsecurity-crs\/r
 systemctl restart apache2
 
 #memcached 설치
-apt-get -y install memcached
+apt -y install memcached
 
 #mod_expires 설정
 a2enmod expires
@@ -535,6 +543,7 @@ systemctl restart php7.3-fpm
 systemctl restart php7.4-fpm
 systemctl restart php8.0-fpm
 systemctl restart php8.1-fpm
+systemctl restart php8.2-fpm
 
 systemctl enable php5.6-fpm
 systemctl enable php7.0-fpm
@@ -544,6 +553,7 @@ systemctl enable php7.3-fpm
 systemctl enable php7.4-fpm
 systemctl enable php8.0-fpm
 systemctl enable php8.1-fpm
+systemctl enable php8.2-fpm
 
 cd /root/UAAI
 
