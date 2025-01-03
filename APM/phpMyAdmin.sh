@@ -4,8 +4,8 @@
 #                                                                                   #
 # * Ubuntu with AAI                                                                 #
 # * Ubuntu 20.04.5-live-server                                                      #
-# * Apache 2.4.X , MariaDB 10.3.X, Multi-PHP(base php7.2) setup shell script        #
-# * Created Date    : 2023/03/31                                                    #
+# * Apache 2.4.X , MariaDB 10.11.X, Multi-PHP(base php8.2) setup shell script        #
+# * Created Date    : 2025/01/01                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################

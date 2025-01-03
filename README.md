@@ -1,6 +1,6 @@
-UAAI - APM AUTO INSTALL V.20
+UAAI - APM AUTO INSTALL V.24
 <pre>
-UBUNTU 20.04 버전에서 작업되어 졌습니다.
+UBUNTU 24.04.1 버전에서 작업되어 졌습니다.
 쉽고 빠른 설치, 운영, 업데이트까지 고려한 설계
 쉬운 업데이트 지원. (공식+인기 저장소를 사용하여 apt-get 만으로 업데이트 완료)
 사용자 생성,삭제,백업 스크립트 사용으로 시스템 계정, 디비 계정 자동 생성 지원
@@ -48,7 +48,7 @@ UAAI  주요 명령
 
 7. 사용중인 php 버전을 다른 버전으로 교체 할 경우에는 /etc/apache2/sites-available/계정명-le-ssl.conf(또는 계정명.conf) 파일을 에디터로 열고 
    SetHandler "proxy:unix:/var/run/php/php7.2-fpm.sock|fcgi://localhost/" 이부분을 찾아서 php7.2 부분의 뒷자리 두 숫자를 수정해 주시면 됩니다.
-   예 : PHP 5.6 사용시 5.6, PHP 7.0 사용시 7.0, PHP 8.1 사용시 8.1 등으로 수정 후 UAAI 폴더내의 ./restart.sh 를 진행해 주시면 됩니다. 
+   예 : PHP 5.6 사용시 5.6, PHP 7.0 사용시 7.0, PHP 8.4 사용시 8.4 등으로 수정 후 UAAI 폴더내의 ./restart.sh 를 진행해 주시면 됩니다. 
 
 8. phpmyadmin wget 설치로 변경하고 http://ip/phpmyadmin 으로 호출하여 사용 되며, 버추얼 호스트 수정 또는 추가를 이용해 서브 도메인으로 사용 하실 수 있습니다.
 
@@ -63,8 +63,8 @@ https://apachezone.com
 APM 설치 버전은 아래와 같습니다.
 
 apache2 2.4.x
-php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2
-mariadb 10.3.x
+php (base php7.2) 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4
+mariadb 10.11.x
 ionCube PHP Loader
 Zend OPcache
 Let's Encrypt

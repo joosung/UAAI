@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ##########################################################
-# * adduser V 20                                         #
+# * adduser V 21                                         #
 # * Ubuntu with AAI                                      #
-# * Created Date    : 2023/03/31                         #
+# * Created Date    : 2025/01/01                         #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )  # 
 ##########################################################
 
