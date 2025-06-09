@@ -522,7 +522,7 @@ chmod 700 /etc/cron.daily/backup
 chmod 700 /etc/cron.daily/check_chkrootkit
 chmod 700 /etc/cron.daily/letsencrypt-renew
 
-echo "00 20 * * * /root/cron.daily/check_chkrootkit" >> /etc/crontab
+echo "00 20 * * * /etc/cron.daily/check_chkrootkit" >> /etc/crontab
 echo "01 02,14 * * * /etc/cron.daily/letsencrypt-renew" >> /etc/crontab
 echo "01 01 * * 7 /root/UAAI/clamav.sh" >> /etc/crontab
 
