@@ -5,7 +5,7 @@
 # * Ubuntu with AAI                                                                 #
 # * Ubuntu 20.04.5-live-server                                                      #
 # * Apache 2.4.X , MariaDB 10.11.X, Multi-PHP(base php8.2) setup shell script        #
-# * Created Date    : 2025/01/01                                                    #
+# * Created Date    : 2026/09/28                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
 #####################################################################################
@@ -22,10 +22,10 @@ apt-get install unzip
 
 cd /var/www/html
 
-wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
-unzip phpMyAdmin-5.2.1-all-languages.zip
-mv phpMyAdmin-5.2.1-all-languages phpmyadmin
-rm phpMyAdmin-5.2.1-all-languages.zip
+wget https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip
+unzip phpMyAdmin-5.2.3-all-languages.zip
+mv phpMyAdmin-5.2.3-all-languages phpmyadmin
+rm phpMyAdmin-5.2.3-all-languages.zip
 
 cd phpmyadmin
 cp -av config.sample.inc.php config.inc.php

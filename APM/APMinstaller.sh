@@ -3,11 +3,12 @@
 #####################################################################################
 #                                                                                   #
 # * Ubuntu with AAI                                                                 #
-# * Ubuntu 24.04.1-live-server                                                      #
+# * Ubuntu 24.04.5-live-server ,  Ubuntu 26.04.1-live-server        #
 # * Apache 2.4.X , MariaDB 10.11.X, Multi-PHP(base php8.2) setup shell script       #
-# * Created Date    : 2025/01/01                                                    #
+# * Created Date    : 2026/09/28                                                    #
 # * Created by  : Joo Sung ( webmaster@apachezone.com )                             #
 #                                                                                   #
+
 #####################################################################################
 
 ##########################################
@@ -132,6 +133,8 @@ sudo apt install software-properties-common -y
 LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update -y
 
+apt -y install php8.5 php8.5-cli php8.5-fpm php-common php8.5-mbstring php8.5-imap php8.5-ldap php8.5-xmlrpc php-memcache php-memcached php-geoip php8.5-curl php8.5-xml php8.5-soap php8.5-gd php8.5-mysql php8.5-bcmath php8.5-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.5-bz2 php8.5-cgi php8.5-dba php8.5-enchant php8.5-gmp php8.5-snmp php8.5-zip php-imagick 
+
 apt -y install php8.4 php8.4-cli php8.4-fpm php-common php8.4-mbstring php8.4-imap php8.4-ldap php8.4-xmlrpc php-memcache php-memcached php-geoip php8.4-curl php8.4-xml php8.4-soap php8.4-gd php8.4-mysql php8.4-opcache php8.4-bcmath php8.4-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.4-bz2 php8.4-cgi php8.4-dba php8.4-enchant php8.4-gmp php8.4-snmp php8.4-zip php-imagick 
 
 apt -y install php8.3 php8.3-cli php8.3-fpm php-common php8.3-mbstring php8.3-imap php8.3-ldap php8.3-xmlrpc php-memcache php-memcached php-geoip php8.3-curl php8.3-xml php8.3-soap php8.3-gd php8.3-mysql php8.3-opcache php8.3-bcmath php8.3-dev php-pear libgeoip-dev libapache2-mod-geoip libapache2-mod-php uwsgi-plugin-php libmcrypt-dev php8.3-bz2 php8.3-cgi php8.3-dba php8.3-enchant php8.3-gmp php8.3-snmp php8.3-zip php-imagick 
@@ -219,6 +222,20 @@ sudo a2dismod -f autoindex
 
 
 systemctl restart apache2
+
+cp -av /etc/php/8.5/fpm/php.ini /etc/php/8.5/fpm/php.ini.original
+sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/8.5/fpm/php.ini
+sed -i 's/expose_php = On/expose_php = Off/' /etc/php/8.5/fpm/php.ini
+sed -i 's/display_errors = Off/display_errors = On/' /etc/php/8.5/fpm/php.ini
+sed -i 's/;error_log = php_errors.log/error_log = php_errors.log/' /etc/php/8.5/fpm/php.ini
+sed -i 's/error_reporting = E_ALL \& ~E_DEPRECATED/error_reporting = E_ALL \& ~E_NOTICE \& ~E_DEPRECATED \& ~E_USER_DEPRECATED/' /etc/php/8.5/fpm/php.ini
+sed -i 's/variables_order = "GPCS"/variables_order = "EGPCS"/' /etc/php/8.5/fpm/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 100M/' /etc/php/8.5/fpm/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' /etc/php/8.5/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = "Asia\/Seoul"/' /etc/php/8.5/fpm/php.ini
+sed -i 's/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/' /etc/php/8.5/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions = system,exec,passthru,proc_open,popen,curl_multi_exec,parse_ini_file,show_source/' /etc/php/8.5/fpm/php.ini
+sed -i 's/allow_url_fopen = On/allow_url_fopen = Off/' /etc/php/8.5/fpm/php.ini 
 
 cp -av /etc/php/8.4/fpm/php.ini /etc/php/8.4/fpm/php.ini.original
 sed -i 's/short_open_tag = Off/short_open_tag = On/' /etc/php/8.4/fpm/php.ini
@@ -565,6 +582,8 @@ sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_8.0.s
 sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_8.1.so' /etc/php/8.1/fpm/php.ini
 sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_8.2.so' /etc/php/8.2/fpm/php.ini
 sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_8.3.so' /etc/php/8.3/fpm/php.ini
+sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_8.4.so' /etc/php/8.4/fpm/php.ini
+#sed -i '/; End:/i\zend_extension = /usr/lib/php/ioncube/ioncube_loader_lin_8.5.so' /etc/php/8.5/fpm/php.ini
 
 #중요 폴더 및 파일 링크
 ln -s /etc/letsencrypt /root/UAAI/letsencrypt
@@ -582,6 +601,7 @@ systemctl restart php8.1-fpm
 systemctl restart php8.2-fpm
 systemctl restart php8.3-fpm
 systemctl restart php8.4-fpm
+systemctl restart php8.5-fpm
 
 systemctl enable php5.6-fpm
 systemctl enable php7.0-fpm
@@ -594,6 +614,7 @@ systemctl enable php8.1-fpm
 systemctl enable php8.2-fpm
 systemctl enable php8.3-fpm
 systemctl enable php8.4-fpm
+systemctl restart php8.5-fpm
 
 cd /root/UAAI
 
